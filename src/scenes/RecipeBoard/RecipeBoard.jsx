@@ -24,7 +24,7 @@ const RecipeBoard = () => {
             display="grid"
             gridColumn="span 4"
             gridRow="span 2"
-            overflow="auto"
+          
           >
             <RecipeCard
               title={recipe.recipe.label}
