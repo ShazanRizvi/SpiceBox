@@ -12,12 +12,19 @@ import {
   CardContent,
   Paper,
   CircularProgress,
+  Modal,
+  TextField,
 } from "@mui/material";
 import "./RecipeDetails.css";
 import { styled } from "@mui/material/styles";
+import IosShareIcon from "@mui/icons-material/IosShare";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const RecipeDetail = () => {
   const { getRecipeByID, singleRecipe } = useContext(recipeContext);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   let { id } = useParams();
   useEffect(() => {
     getRecipeByID(id);
@@ -32,6 +39,22 @@ const RecipeDetail = () => {
     backgroundImage:
       "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)",
   });
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const handleInfoIconClick = () => {
+    window.location.href = `${singleRecipe.url}`;
+  };
 
   return (
     <>
@@ -62,10 +85,20 @@ const RecipeDetail = () => {
       >
         <Box display="grid" gridColumn="span 7" overflow="auto">
           <Box overflow="auto">
-            <Box>
+            <Box display="flex" justifyContent="space-between">
               <Typography variant="h3" fontFamily="Montserrat" fontWeight="600">
                 {singleRecipe.label}
               </Typography>
+              <Box width="100px">
+                <InfoOutlinedIcon
+                  onClick={handleInfoIconClick}
+                  sx={{ p: "13px 10px 8px 0", height: "100%" }}
+                />
+                <IosShareIcon
+                  onClick={handleOpen}
+                  sx={{ pb: "10px", height: "100%" }}
+                />
+              </Box>
             </Box>
 
             {/* Recipe health Tags */}
@@ -146,7 +179,7 @@ const RecipeDetail = () => {
           </Box>
 
           {/* Calories table */}
-          <Box display="flex" mt="30px" overflow="auto">
+          <Box display="flex" overflow="auto">
             {singleRecipe &&
               singleRecipe &&
               singleRecipe.digest &&
@@ -211,16 +244,95 @@ const RecipeDetail = () => {
           gridColumn="span 5"
           gridRow="span 1"
           overflow="auto"
-          height="60%"
-          p="30px"
+          height="80%"
+          p="20px"
         >
           <Box
             display="grid"
             gridRow="span 4"
-            overflow="scroll"
+            overflow="hidden"
             height="fit-content"
           >
-            <Box display="grid" overflow="auto">
+            {/* Basic Details of the recipe */}
+            <Box
+              display="grid"
+              overflow="hidden"
+              p="20px"
+              boxShadow="-20px 10px 10px #D3D3D3"
+              backgroundColor="white"
+            >
+              {singleRecipe &&
+                singleRecipe.cuisineType &&
+                singleRecipe.cuisineType.map((item) => (
+                  <Box
+                    fontWeight="500"
+                    sx={{
+                      p: "10px",
+                      height: "fit-content",
+                      m: "5px",
+                    }}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily="Montserrat"
+                      fontWeight="600"
+                      pb="3px"
+                    >
+                      Cuisine Type
+                    </Typography>
+                    {item}
+                  </Box>
+                ))}
+              {singleRecipe &&
+                singleRecipe.mealType &&
+                singleRecipe.mealType.map((item) => (
+                  <Box
+                    fontWeight="500"
+                    sx={{
+                      p: "10px",
+                      height: "fit-content",
+                      m: "5px",
+                    }}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily="Montserrat"
+                      fontWeight="600"
+                      pb="3px"
+                    >
+                      Meal Type
+                    </Typography>
+                    {item}
+                  </Box>
+                ))}
+              {singleRecipe &&
+                singleRecipe.dishType &&
+                singleRecipe.dishType.map((item) => (
+                  <Box
+                    fontWeight="500"
+                    sx={{
+                      p: "10px",
+                      height: "fit-content",
+                      m: "5px",
+                    }}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily="Montserrat"
+                      fontWeight="600"
+                      pb="3px"
+                    >
+                      Dish Type
+                    </Typography>
+                    {item}
+                  </Box>
+                ))}
+            </Box>
+
+            <Box display="grid" overflow="auto" mt="30px">
               {singleRecipe &&
                 singleRecipe.ingredientLines &&
                 singleRecipe.ingredientLines.map((item) => (
@@ -229,7 +341,7 @@ const RecipeDetail = () => {
                     boxShadow="8px 8px 15px #D3D3D3"
                     sx={{
                       p: "10px",
-                      height: "40px",
+                      height: "fit-content",
                       m: "5px",
                       backgroundColor: "#CCCCFF",
                     }}
@@ -241,6 +353,34 @@ const RecipeDetail = () => {
           </Box>
         </Box>
       </Box>
+      {/* Modal for link copy */}
+
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              fontFamily="Montserrat"
+            >
+              Share this Recipe
+            </Typography>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              fullWidth="100%"
+              size="small"
+              value={singleRecipe.shareAs}
+            />
+          </Box>
+        </Modal>
+      </div>
     </>
   );
 };

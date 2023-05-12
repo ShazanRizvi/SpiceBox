@@ -3,12 +3,14 @@ import { Box } from "@mui/material";
 import Search from "../../components/search/Search";
 import RecipeCard from "../../components/RecipeCard/RecipeCard";
 import recipeContext from "../../context/recipeContext";
+import LandingPage from "../../components/LandingPage/LandingPage";
 
 const RecipeBoard = () => {
   const { recipe } = useContext(recipeContext);
   return (
     <Box>
       <Search />
+      {recipe.length===0?(<LandingPage/>):
       <Box
         fontFamily="Montserrat"
         m="20px"
@@ -19,7 +21,8 @@ const RecipeBoard = () => {
         maxHeight="100vh"
         overflow="auto"
       >
-        {recipe.map((recipe) => (
+        {
+          (recipe.map((recipe) => (
           <Box
             display="grid"
             gridColumn="span 4"
@@ -37,8 +40,8 @@ const RecipeBoard = () => {
               id={recipe.recipe.uri.split('_').pop()}
             />
           </Box>
-        ))}
-      </Box>
+        )))}
+      </Box>}
     </Box>
   );
 };
