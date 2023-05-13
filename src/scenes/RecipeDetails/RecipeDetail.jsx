@@ -30,6 +30,7 @@ const RecipeDetail = () => {
     getRecipeByID(id);
   }, []);
 
+
   const GradientOverlay = styled(Box)({
     position: "absolute",
     top: 0,

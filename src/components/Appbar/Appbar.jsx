@@ -18,14 +18,20 @@ const Appbar = () => {
 
   return (
     <Box
-      style={{
+      sx={{
         display: "flex",
         height: "100%",
         minHeight: "400px",
         overflow: "hidden",
       }}
     >
-      <Sidebar style={{ display: "flex", height: "100%" ,marginRight:"20px"}}>
+      <Sidebar
+        style={{
+          display: "flex",
+          height: "100%",
+          marginRight: "20px",
+        }}
+      >
         <Menu>
           <MenuItem
             onClick={() => collapseSidebar()}
@@ -46,9 +52,6 @@ const Appbar = () => {
               >
                 Spicebox
               </Typography>
-              <IconButton onClick={() => collapseSidebar()}>
-                <SortIcon />
-              </IconButton>
             </Box>
           </MenuItem>
           <Box>
